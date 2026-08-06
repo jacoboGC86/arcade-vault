@@ -13,6 +13,16 @@ https://github.com/Klerith/fernando-skills
 
 ```bash
 npx skills@latest add Klerith/fernando-skills
+npx skills add https://github.com/anthropics/skills --skill frontend-design
+```
+
+## Commands
+
+```bash
+npm run dev      # start dev server (Turbopack)
+npm run build    # production build
+npm run start    # run production build
+npm run lint     # eslint
 ```
 
 ## Hola mundo! XD

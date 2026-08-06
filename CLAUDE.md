@@ -18,21 +18,8 @@ The app is currently the unmodified `create-next-app` scaffold (`app/layout.tsx`
 
 When implementing a screen, read the matching template file first and port its structure/behavior into the App Router (real routes/components), rather than inventing new UI patterns.
 
-## Workflow
+## Skills
 
-This repo follows Spec Driven Design using the `/spec` and `/spec-impl` commands from the `Klerith/fernando-skills` skill pack (see README.md). Install with:
-
-```bash
-npx skills@latest add Klerith/fernando-skills
-```
-
-## Commands
-
-```bash
-npm run dev      # start dev server (Turbopack)
-npm run build    # production build
-npm run start    # run production build
-npm run lint     # eslint
-```
+Usa siempre /frontend-design para diseñar la interfaz de usuario
 
 No test runner is configured yet.
