@@ -94,19 +94,19 @@ Cada paso deja el proyecto compilando y navegable.
 
 ## Criterios de aceptación
 
-- [ ] `/` redirige a `/biblioteca`.
-- [ ] `/biblioteca` muestra el grid de juegos, el buscador filtra por título en tiempo real, los chips filtran por categoría, y aparece el estado "NO HAY RESULTADOS" cuando no hay coincidencias.
-- [ ] Click en una `GameCard` (o su botón "JUGAR") navega a `/juegos/[id]` del juego correspondiente.
-- [ ] `/juegos/[id]` muestra info del juego, tags, stats, leaderboard de 10 filas, y botones "JUGAR AHORA" (→ `/jugar/[id]`) y "VOLVER AL VAULT" (→ `/biblioteca`).
-- [ ] `/juegos/id-inexistente` responde con la página 404 de Next.js.
-- [ ] `/jugar/[id]` incrementa el score automáticamente cada ~220ms, sube de nivel cada 2500 puntos, el botón "PAUSA" detiene el incremento y cambia a "REANUDAR", el botón "FIN" abre el modal de fin de partida con el score final.
-- [ ] En el modal de fin de partida, guardar la puntuación persiste en `localStorage["av_scores"]` y muestra el toast "▸ PUNTUACIÓN GUARDADA_"; "JUGAR DE NUEVO" reinicia el estado; "VOLVER AL VAULT" navega a `/biblioteca`.
-- [ ] `/auth` permite alternar entre "Iniciar sesión" y "Crear cuenta", cualquier envío del formulario loguea al usuario (nombre en mayúsculas, máx. 10 caracteres) y navega a `/biblioteca`; "Jugar como invitado" loguea como invitado.
-- [ ] Tras loguearse, el Nav muestra `{NOMBRE} ▾` en vez de "Iniciar Sesión"; recargar la página mantiene la sesión (persistida en `localStorage["av_user"]`).
-- [ ] `/salon` muestra tabs por juego, podio (oro/plata/bronce), tabla de 12 filas, y si hay sesión iniciada añade la fila "▸ TU MEJOR MARCA EN [JUEGO]".
-- [ ] El link activo del Nav se resalta correctamente en las 5 rutas (Biblioteca se resalta también en `/juegos/*` y `/jugar/*`).
-- [ ] El menú hamburguesa funciona en viewport móvil (<840px) y se cierra al navegar o al hacer click en el backdrop.
-- [ ] `npm run build` compila sin errores de TypeScript ni de rutas.
+- [x] `/` redirige a `/biblioteca`.
+- [x] `/biblioteca` muestra el grid de juegos, el buscador filtra por título en tiempo real, los chips filtran por categoría, y aparece el estado "NO HAY RESULTADOS" cuando no hay coincidencias.
+- [x] Click en una `GameCard` (o su botón "JUGAR") navega a `/juegos/[id]` del juego correspondiente.
+- [x] `/juegos/[id]` muestra info del juego, tags, stats, leaderboard de 10 filas, y botones "JUGAR AHORA" (→ `/jugar/[id]`) y "VOLVER AL VAULT" (→ `/biblioteca`).
+- [x] `/juegos/id-inexistente` responde con la página 404 de Next.js.
+- [x] `/jugar/[id]` incrementa el score automáticamente cada ~220ms, sube de nivel cada 2500 puntos, el botón "PAUSA" detiene el incremento y cambia a "REANUDAR", el botón "FIN" abre el modal de fin de partida con el score final.
+- [x] En el modal de fin de partida, guardar la puntuación persiste en `localStorage["av_scores"]` y muestra el toast "▸ PUNTUACIÓN GUARDADA_"; "JUGAR DE NUEVO" reinicia el estado; "VOLVER AL VAULT" navega a `/biblioteca`.
+- [x] `/auth` permite alternar entre "Iniciar sesión" y "Crear cuenta", cualquier envío del formulario loguea al usuario (nombre en mayúsculas, máx. 10 caracteres) y navega a `/biblioteca`; "Jugar como invitado" loguea como invitado.
+- [x] Tras loguearse, el Nav muestra `{NOMBRE} ▾` en vez de "Iniciar Sesión"; recargar la página mantiene la sesión (persistida en `localStorage["av_user"]`).
+- [x] `/salon` muestra tabs por juego, podio (oro/plata/bronce), tabla de 12 filas, y si hay sesión iniciada añade la fila "▸ TU MEJOR MARCA EN [JUEGO]".
+- [x] El link activo del Nav se resalta correctamente en las 5 rutas (Biblioteca se resalta también en `/juegos/*` y `/jugar/*`).
+- [x] El menú hamburguesa funciona en viewport móvil (<840px) y se cierra al navegar o al hacer click en el backdrop.
+- [x] `npm run build` compila sin errores de TypeScript ni de rutas.
 
 ## Decisiones tomadas y descartadas
 
