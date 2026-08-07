@@ -1,6 +1,6 @@
 # 04 — Integración base de Supabase
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** —
 **Fecha:** 2026-08-07
 
@@ -53,15 +53,15 @@ Cada paso deja el proyecto compilando y navegable; ninguna pantalla existente ca
 
 ## Criterios de aceptación
 
-- [ ] `@supabase/supabase-js` y `@supabase/ssr` están en `package.json` (`dependencies`).
-- [ ] `lib/supabase/client.ts` exporta un `createClient()` que instancia un cliente browser válido.
-- [ ] `lib/supabase/server.ts` exporta un `createClient()` async que instancia un cliente server válido usando cookies de `next/headers`.
-- [ ] `lib/supabase/middleware.ts` exporta `updateSession` y `middleware.ts` en la raíz lo invoca con el `matcher` correcto.
-- [ ] `.env.example` incluye `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` como placeholders sin valores reales.
-- [ ] `.env.local` contiene los valores reales del proyecto `tgxskeawwgywxwtblzvl` y no se commitea (ya cubierto por `.gitignore`).
-- [ ] `npm run check:supabase` se conecta al proyecto Supabase real y termina con éxito (exit code 0), imprimiendo confirmación por consola.
-- [ ] Ninguna pantalla existente (`/`, `/biblioteca`, `/juegos/[id]`, `/jugar/[id]`, `/auth`, `/salon`, `/about`) cambia de comportamiento visible — el middleware nuevo no interfiere con la navegación actual.
-- [ ] `npm run build` compila sin errores de TypeScript ni de rutas.
+- [x] `@supabase/supabase-js` y `@supabase/ssr` están en `package.json` (`dependencies`).
+- [x] `lib/supabase/client.ts` exporta un `createClient()` que instancia un cliente browser válido.
+- [x] `lib/supabase/server.ts` exporta un `createClient()` async que instancia un cliente server válido usando cookies de `next/headers`.
+- [x] `lib/supabase/middleware.ts` exporta `updateSession` y `middleware.ts` en la raíz lo invoca con el `matcher` correcto.
+- [x] `.env.example` incluye `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` como placeholders sin valores reales.
+- [x] `.env.local` contiene los valores reales del proyecto `tgxskeawwgywxwtblzvl` y no se commitea (ya cubierto por `.gitignore`).
+- [x] `npm run check:supabase` se conecta al proyecto Supabase real y termina con éxito (exit code 0), imprimiendo confirmación por consola.
+- [x] Ninguna pantalla existente (`/`, `/biblioteca`, `/juegos/[id]`, `/jugar/[id]`, `/auth`, `/salon`, `/about`) cambia de comportamiento visible — el middleware nuevo no interfiere con la navegación actual.
+- [x] `npm run build` compila sin errores de TypeScript ni de rutas.
 
 ## Decisiones tomadas y descartadas
 
