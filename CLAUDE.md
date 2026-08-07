@@ -19,6 +19,12 @@ The scaffold has been ported into real App Router routes and components. The ori
 - `components/nav.tsx`, `components/game-card.tsx`, `components/game-player.tsx`, `components/mini-card.tsx` — shared UI pieces. `mini-card.tsx` is the simpler (no tilt) card used in the Home games rail, ported from `MiniCard` in `home.jsx`.
 - `lib/data.ts` — game/category data (ported from `data.jsx`), typed with `Game`, `GameCategory`, `GameColor`.
 - `lib/session.tsx` — `SessionProvider`/`useSession` React context replacing the prototype's ad hoc `localStorage` user/scores handling (`av_user`, `av_scores` keys).
+- `lib/games/engine.ts` — generic `GameEngine`/`GameEngineState`/`GameEngineFactory` contract (`start`/`stop`/`pause`/`resume`/`restart`/`forceGameOver` + `onStateChange`/`onGameOver` callbacks) that any real game engine implements to plug into the React HUD.
+- `lib/games/asteroids.ts` — `createAsteroidsEngine`, a TypeScript port of `references/started-games/02-asteroids/` (ship, asteroids, bullets, particles, shield/triple-shot power-ups) as a closure with no module-level state, implementing `GameEngine`.
+- `lib/games/registry.ts` — `GAME_ENGINES` map from game `id` to `GameEngineFactory` (currently only `asteroid`); `components/game-player.tsx` looks up the game's `id` here and falls back to the existing simulated player for any `id` without a registered engine.
+- `components/games/game-canvas.tsx` — client component that mounts the fixed 800×600 `<canvas>`, wires it to a `GameEngine` instance (mount/unmount lifecycle, keyboard focus handling, "CLIC PARA JUGAR" overlay), and exposes `pause`/`resume`/`restart`/`forceGameOver` to the parent via ref.
+
+See `specs/05-motor-de-juegos-y-asteroides.md` for the full rationale behind the engine contract and the Asteroids port.
 
 `specs/` holds Spec Driven Design docs (see README) — check there for the status and rationale behind each screen before assuming behavior is undocumented.
 

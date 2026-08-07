@@ -1,6 +1,6 @@
 # 05 — Motor de juegos reutilizable y Asteroids ("ASTEROID")
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** —
 **Fecha:** 2026-08-07
 
@@ -83,23 +83,23 @@ Cada paso deja el proyecto compilando; el juego "ASTEROID" solo queda jugable de
 
 ## Criterios de aceptación
 
-- [ ] En `lib/data.ts`, el juego tiene `id: "asteroid"`, `title: "ASTEROID"` y `cover: "cover-asteroid"` (ya no `"rocas"`/`"ROCAS"`/`"cover-rocas"`); las clases `.cover-asteroid*` existen en `app/globals.css` y la fila de actividad en vivo en `app/page.tsx` muestra `"Asteroid"`.
-- [ ] `lib/games/engine.ts` exporta `GameEngine`, `GameEngineState` y `GameEngineFactory`; `GameEngine` incluye `forceGameOver`.
-- [ ] `lib/games/asteroids.ts` exporta `createAsteroidsEngine` sin variables de estado a nivel de módulo (todo el estado vive dentro del closure de la instancia).
-- [ ] `lib/games/registry.ts` mapea `"asteroid"` a `createAsteroidsEngine`.
+- [x] En `lib/data.ts`, el juego tiene `id: "asteroid"`, `title: "ASTEROID"` y `cover: "cover-asteroid"` (ya no `"rocas"`/`"ROCAS"`/`"cover-rocas"`); las clases `.cover-asteroid*` existen en `app/globals.css` y la fila de actividad en vivo en `app/page.tsx` muestra `"Asteroid"`.
+- [x] `lib/games/engine.ts` exporta `GameEngine`, `GameEngineState` y `GameEngineFactory`; `GameEngine` incluye `forceGameOver`.
+- [x] `lib/games/asteroids.ts` exporta `createAsteroidsEngine` sin variables de estado a nivel de módulo (todo el estado vive dentro del closure de la instancia).
+- [x] `lib/games/registry.ts` mapea `"asteroid"` a `createAsteroidsEngine`.
 - [ ] En `/jugar/asteroid`, mover la nave (flechas), propulsar (↑) y disparar (espacio) funciona igual que en el prototipo original, incluyendo el envolvimiento toroidal de bordes.
-- [ ] Los asteroides grandes se parten en medianos y estos en pequeños al ser destruidos, sumando 20/50/100 puntos respectivamente.
-- [ ] El escudo temporal y el disparo triple aparecen como power-ups recogibles y aplican su efecto (duración e indicador visual) igual que en el original.
-- [ ] El HUD de React (`player-hud`) refleja score, vidas y nivel reales del engine, actualizándose en vivo; el canvas ya no dibuja su propio HUD superpuesto.
-- [ ] El canvas no responde al teclado hasta que tiene foco; se muestra un overlay "CLIC PARA JUGAR" mientras no lo tiene, y reaparece si se pierde el foco durante la partida.
-- [ ] El botón PAUSA congela el juego (nave/asteroides/balas quedan quietos) y REANUDAR lo retoma sin saltos de física.
-- [ ] El botón FIN llama a `forceGameOver()`, que detiene el loop y dispara `onGameOver` con el score acumulado, abriendo el modal de fin de partida.
-- [ ] Quedarse sin vidas (3 vidas agotadas) abre el mismo modal de fin de partida que el botón FIN, con el score real alcanzado.
-- [ ] Al llegar a game over (por vidas agotadas o por `forceGameOver()`), presionar Espacio mientras el modal de fin de partida está abierto no reinicia la partida por detrás del modal — el motor queda detenido y solo "JUGAR DE NUEVO" (`restart()`) reinicia.
-- [ ] "GUARDAR PUNTUACIÓN" en el modal llama a `saveScore({ game: "asteroid", score, name })` con el score real (verificable en `localStorage.av_scores`).
-- [ ] "JUGAR DE NUEVO" reinicia completamente la partida (score 0, 3 vidas, nivel 1, nuevos asteroides).
-- [ ] Los demás 7 juegos del catálogo (`/jugar/bloque-buster`, `/jugar/caida`, etc.) siguen mostrando el reproductor simulado actual sin cambios de comportamiento visible.
-- [ ] `npm run build` compila sin errores de TypeScript.
+- [x] Los asteroides grandes se parten en medianos y estos en pequeños al ser destruidos, sumando 20/50/100 puntos respectivamente.
+- [x] El escudo temporal y el disparo triple aparecen como power-ups recogibles y aplican su efecto (duración e indicador visual) igual que en el original.
+- [x] El HUD de React (`player-hud`) refleja score, vidas y nivel reales del engine, actualizándose en vivo; el canvas ya no dibuja su propio HUD superpuesto.
+- [x] El canvas no responde al teclado hasta que tiene foco; se muestra un overlay "CLIC PARA JUGAR" mientras no lo tiene, y reaparece si se pierde el foco durante la partida.
+- [x] El botón PAUSA congela el juego (nave/asteroides/balas quedan quietos) y REANUDAR lo retoma sin saltos de física.
+- [x] El botón FIN llama a `forceGameOver()`, que detiene el loop y dispara `onGameOver` con el score acumulado, abriendo el modal de fin de partida.
+- [x] Quedarse sin vidas (3 vidas agotadas) abre el mismo modal de fin de partida que el botón FIN, con el score real alcanzado.
+- [x] Al llegar a game over (por vidas agotadas o por `forceGameOver()`), presionar Espacio mientras el modal de fin de partida está abierto no reinicia la partida por detrás del modal — el motor queda detenido y solo "JUGAR DE NUEVO" (`restart()`) reinicia.
+- [x] "GUARDAR PUNTUACIÓN" en el modal llama a `saveScore({ game: "asteroid", score, name })` con el score real (verificable en `localStorage.av_scores`).
+- [x] "JUGAR DE NUEVO" reinicia completamente la partida (score 0, 3 vidas, nivel 1, nuevos asteroides).
+- [x] Los demás 7 juegos del catálogo (`/jugar/bloque-buster`, `/jugar/caida`, etc.) siguen mostrando el reproductor simulado actual sin cambios de comportamiento visible.
+- [x] `npm run build` compila sin errores de TypeScript.
 
 ## Decisiones tomadas y descartadas
 
