@@ -19,17 +19,15 @@ async function main() {
     process.exit(1);
   }
 
-  try {
-    const response = await fetch(`${url}/rest/v1/`, {
-      headers: { apikey: key },
-    });
+  const { error: queryError } = await supabase
+    .from("__check_supabase_connectivity__")
+    .select("*")
+    .limit(1);
 
-    if (!response.ok && response.status !== 404) {
-      console.error(`[ERROR] Respuesta HTTP inesperada: ${response.status}`);
-      process.exit(1);
-    }
-  } catch (err) {
-    console.error(`[ERROR] No se pudo alcanzar Supabase: ${(err as Error).message}`);
+  // PGRST205: table not found in schema cache -> confirms we reached PostgREST
+  // with a valid API key (expected, since no schema exists yet).
+  if (queryError && queryError.code !== "PGRST205") {
+    console.error(`[ERROR] ${queryError.message}`);
     process.exit(1);
   }
 
