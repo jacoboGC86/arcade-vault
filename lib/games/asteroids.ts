@@ -503,6 +503,7 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
 
   let lastTime: number | null = null;
   let rafId: number | null = null;
+  let running = false;
 
   let stateChangeCb: ((s: GameEngineState) => void) | null = null;
   let gameOverCb: ((finalScore: number) => void) | null = null;
@@ -640,7 +641,7 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
     }
 
     // Nave vs asteroide
-    if (ship.invincible <= 0) {
+    if (!ship.dead && ship.invincible <= 0) {
       for (const a of asteroids) {
         if (dist(ship, a) < ship.radius + a.radius * 0.82) {
           if (ship.shieldActive) {
@@ -679,15 +680,21 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
     update(dt);
     draw();
     emitState();
-    rafId = requestAnimationFrame(loop);
+    if (running) {
+      rafId = requestAnimationFrame(loop);
+    } else {
+      rafId = null;
+    }
   }
 
   function startLoop() {
+    running = true;
     lastTime = null;
     rafId = requestAnimationFrame(loop);
   }
 
   function stopLoop() {
+    running = false;
     if (rafId !== null) {
       cancelAnimationFrame(rafId);
       rafId = null;
