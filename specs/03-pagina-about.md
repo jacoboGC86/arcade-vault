@@ -1,6 +1,6 @@
 # 03 — Página "Acerca de" (About + Contacto)
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** SPEC 02
 **Fecha:** 2026-08-06
 
