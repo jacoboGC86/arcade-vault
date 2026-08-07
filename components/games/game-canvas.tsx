@@ -14,10 +14,11 @@ interface GameCanvasProps {
   engineFactory: GameEngineFactory;
   onStateChange: (state: GameEngineState) => void;
   onGameOver: (finalScore: number) => void;
+  hideFocusOverlay?: boolean;
 }
 
 const GameCanvas = forwardRef<GameCanvasHandle, GameCanvasProps>(function GameCanvas(
-  { engineFactory, onStateChange, onGameOver },
+  { engineFactory, onStateChange, onGameOver, hideFocusOverlay },
   ref
 ) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -59,7 +60,7 @@ const GameCanvas = forwardRef<GameCanvasHandle, GameCanvasProps>(function GameCa
         onBlur={() => setFocused(false)}
         style={{ width: "100%", height: "100%", display: "block", outline: "none" }}
       />
-      {!focused && (
+      {!focused && !hideFocusOverlay && (
         <div
           className="crt-content"
           role="button"

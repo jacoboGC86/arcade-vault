@@ -119,6 +119,7 @@ export default function GamePlayer({ game }: { game: Game }) {
               engineFactory={engineFactory}
               onStateChange={handleEngineStateChange}
               onGameOver={handleEngineGameOver}
+              hideFocusOverlay={paused}
             />
           ) : (
             <div className="game-arena">
