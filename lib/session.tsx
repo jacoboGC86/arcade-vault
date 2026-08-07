@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 export interface SessionUser {
   name: string;
@@ -10,14 +11,13 @@ export interface ScoreEntry {
   game: string;
   score: number;
   name: string;
-  at: number;
 }
 
 interface SessionContextValue {
   user: SessionUser | null;
   login: (u: SessionUser | null) => void;
   signOut: () => void;
-  saveScore: (entry: Omit<ScoreEntry, "at">) => void;
+  saveScore: (entry: ScoreEntry) => Promise<{ error: string | null }>;
 }
 
 const SessionContext = createContext<SessionContextValue | null>(null);
@@ -43,14 +43,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("av_user");
   };
 
-  const saveScore = (entry: Omit<ScoreEntry, "at">) => {
-    try {
-      const all = JSON.parse(localStorage.getItem("av_scores") || "[]");
-      all.push({ ...entry, at: Date.now() });
-      localStorage.setItem("av_scores", JSON.stringify(all));
-    } catch {
-      // ignore
-    }
+  const saveScore = async (entry: ScoreEntry): Promise<{ error: string | null }> => {
+    const supabase = createClient();
+    const { error } = await supabase.from("scores").insert({
+      game_id: entry.game,
+      name: entry.name,
+      score: entry.score,
+    });
+    return { error: error ? error.message : null };
   };
 
   return (

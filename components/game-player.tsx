@@ -22,6 +22,8 @@ export default function GamePlayer({ game }: { game: Game }) {
   const [over, setOver] = useState(false);
   const [name, setName] = useState(user ? user.name : "INVITADO");
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     if (engineFactory) return;
@@ -73,6 +75,20 @@ export default function GamePlayer({ game }: { game: Game }) {
     setPaused(false);
     setOver(false);
     setSaved(false);
+    setSaving(false);
+    setSaveError(null);
+  };
+
+  const handleSaveScore = async () => {
+    setSaving(true);
+    setSaveError(null);
+    const { error } = await saveScore({ game: game.id, score, name });
+    setSaving(false);
+    if (error) {
+      setSaveError(error);
+      return;
+    }
+    setSaved(true);
   };
 
   return (
@@ -163,15 +179,14 @@ export default function GamePlayer({ game }: { game: Game }) {
                   onChange={(e) => setName(e.target.value.toUpperCase().slice(0, 10))}
                   placeholder="TUS INICIALES"
                 />
-                <button
-                  className="btn yellow"
-                  onClick={() => {
-                    saveScore({ game: game.id, score, name });
-                    setSaved(true);
-                  }}
-                >
-                  GUARDAR PUNTUACIÓN
+                <button className="btn yellow" onClick={handleSaveScore} disabled={saving}>
+                  {saving ? "GUARDANDO…" : "GUARDAR PUNTUACIÓN"}
                 </button>
+                {saveError && (
+                  <div className="mono" style={{ fontSize: 11, color: "var(--magenta)", marginTop: 8 }}>
+                    ▸ ERROR AL GUARDAR: {saveError}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="toast-saved">▸ PUNTUACIÓN GUARDADA_</div>
