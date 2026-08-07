@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #0d0d12;
+  font-family: 'Courier New', Courier, monospace;
+  color: #f0f0f0;
+}
+
+#game {
+  background: #000;
+  border: 2px solid #444;
+  display: block;
+}
