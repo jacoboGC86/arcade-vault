@@ -40,12 +40,12 @@ Cada paso deja el proyecto compilando; la página queda funcionalmente completa 
 
 ## Criterios de aceptación
 
-- [ ] `app/juegos/[id]/page.tsx` ya no llama a `seededScores`.
-- [ ] La tabla "MEJORES PUNTUACIONES" muestra hasta 10 filas reales de `scores` para el `game_id` de la ruta, ordenadas de mayor a menor puntuación.
-- [ ] El stat "Mejor global" muestra el score máximo real de `scores` para ese juego, no `game.best`.
-- [ ] Si el juego no tiene puntuaciones guardadas: la tabla muestra "AÚN NO HAY PUNTUACIONES PARA ESTE JUEGO" y "Mejor global" muestra `—`.
-- [ ] Las fechas de la tabla se formatean con `toLocaleDateString("es-ES")` a partir de `created_at`.
-- [ ] `npm run build` compila sin errores de TypeScript.
+- [x] `app/juegos/[id]/page.tsx` ya no llama a `seededScores`.
+- [x] La tabla "MEJORES PUNTUACIONES" muestra hasta 10 filas reales de `scores` para el `game_id` de la ruta, ordenadas de mayor a menor puntuación.
+- [x] El stat "Mejor global" muestra el score máximo real de `scores` para ese juego, no `game.best`.
+- [x] Si el juego no tiene puntuaciones guardadas: la tabla muestra "AÚN NO HAY PUNTUACIONES PARA ESTE JUEGO" y "Mejor global" muestra `—`.
+- [x] Las fechas de la tabla se formatean con `toLocaleDateString("es-ES")` a partir de `created_at`.
+- [x] `npm run build` compila sin errores de TypeScript.
 
 ## Decisiones tomadas y descartadas
 
