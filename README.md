@@ -9,6 +9,10 @@ Basado en /spec y /spec-impl
 Siguiendo las buenas practicas recomendadas aquí:
 https://github.com/Klerith/fernando-skills
 
+Specs implementadas en `specs/`:
+- `01-mvp-pantallas-visuales.md` — pantallas base (biblioteca, detalle, reproductor, auth, salón).
+- `02-pagina-inicio.md` — página de inicio (`/`) real, reemplazando el redirect a `/biblioteca`.
+
 ## Skills usadas
 
 ```bash
