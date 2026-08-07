@@ -1,6 +1,6 @@
 # 04 — Integración base de Supabase
 
-**Estado:** Draft
+**Estado:** Aprobado
 **Depende de:** —
 **Fecha:** 2026-08-07
 
