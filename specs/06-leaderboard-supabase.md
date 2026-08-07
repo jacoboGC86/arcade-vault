@@ -1,6 +1,6 @@
 # 06 — Leaderboard real con tablas `games` y `scores` en Supabase
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** [[04-integracion-supabase]]
 **Fecha:** 2026-08-07
 
@@ -101,15 +101,15 @@ Cada paso deja el proyecto compilando; el leaderboard queda funcionalmente compl
 
 ## Criterios de aceptación
 
-- [ ] Las tablas `games` y `scores` existen en el proyecto Supabase `tgxskeawwgywxwtblzvl`, con RLS habilitado, policies de `SELECT` públicas en ambas y de `INSERT` pública solo en `scores`.
-- [ ] `games` contiene exactamente los 8 ids/títulos actuales del catálogo (`bloque-buster`, `caida`, `serpentina`, `gloton`, `invasores`, `asteroid`, `ranaria`, `duelo-pixel`).
-- [ ] Guardar una puntuación desde el modal de fin de partida (cualquier juego del catálogo) inserta una fila real en `scores` con `game_id`, `name` y `score` correctos, verificable vía consulta a Supabase.
-- [ ] `saveScore` ya no lee ni escribe `localStorage.av_scores`.
-- [ ] `/salon` muestra, para el juego seleccionado, las puntuaciones reales de `scores` ordenadas de mayor a menor (hasta 12), no `seededScores()`.
-- [ ] Un juego sin ninguna puntuación guardada muestra el mensaje de estado vacío en `/salon` en vez de podio/tabla con datos falsos.
-- [ ] El bloque "TU MEJOR MARCA EN {juego}" ya no aparece en `/salon`.
-- [ ] Si el insert a Supabase falla (ej. red caída), el modal de fin de partida muestra un mensaje de error en vez de fallar silenciosamente o cerrarse como si hubiera guardado.
-- [ ] `npm run build` compila sin errores de TypeScript.
+- [x] Las tablas `games` y `scores` existen en el proyecto Supabase `tgxskeawwgywxwtblzvl`, con RLS habilitado, policies de `SELECT` públicas en ambas y de `INSERT` pública solo en `scores`.
+- [x] `games` contiene exactamente los 8 ids/títulos actuales del catálogo (`bloque-buster`, `caida`, `serpentina`, `gloton`, `invasores`, `asteroid`, `ranaria`, `duelo-pixel`).
+- [x] Guardar una puntuación desde el modal de fin de partida (cualquier juego del catálogo) inserta una fila real en `scores` con `game_id`, `name` y `score` correctos, verificable vía consulta a Supabase.
+- [x] `saveScore` ya no lee ni escribe `localStorage.av_scores`.
+- [x] `/salon` muestra, para el juego seleccionado, las puntuaciones reales de `scores` ordenadas de mayor a menor (hasta 12), no `seededScores()`.
+- [x] Un juego sin ninguna puntuación guardada muestra el mensaje de estado vacío en `/salon` en vez de podio/tabla con datos falsos.
+- [x] El bloque "TU MEJOR MARCA EN {juego}" ya no aparece en `/salon`.
+- [x] Si el insert a Supabase falla (ej. red caída), el modal de fin de partida muestra un mensaje de error en vez de fallar silenciosamente o cerrarse como si hubiera guardado.
+- [X] `npm run build` compila sin errores de TypeScript.
 
 ## Decisiones tomadas y descartadas
 
