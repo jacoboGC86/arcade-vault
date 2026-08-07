@@ -10,7 +10,10 @@ export default function Nav() {
   const router = useRouter();
   const { user, signOut } = useSession();
 
-  const isActive = (name: "biblioteca" | "salon" | "auth") => {
+  const isActive = (name: "inicio" | "biblioteca" | "salon" | "auth") => {
+    if (name === "inicio") {
+      return pathname === "/";
+    }
     if (name === "biblioteca") {
       return (
         pathname.startsWith("/biblioteca") ||
@@ -36,6 +39,9 @@ export default function Nav() {
           </div>
         </div>
         <div className="links">
+          <a className={isActive("inicio") ? "active" : ""} onClick={() => go("/")}>
+            Inicio
+          </a>
           <a className={isActive("biblioteca") ? "active" : ""} onClick={() => go("/biblioteca")}>
             Biblioteca
           </a>
@@ -67,6 +73,9 @@ export default function Nav() {
         <div className="pixel neon-cyan" style={{ fontSize: 11, marginBottom: 16 }}>
           MENÚ
         </div>
+        <a className={isActive("inicio") ? "active" : ""} onClick={() => go("/")}>
+          Inicio
+        </a>
         <a className={isActive("biblioteca") ? "active" : ""} onClick={() => go("/biblioteca")}>
           Biblioteca
         </a>
