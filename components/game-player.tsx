@@ -1,12 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Game } from "@/lib/data";
 import { useSession } from "@/lib/session";
+import GameCanvas, { type GameCanvasHandle } from "@/components/games/game-canvas";
+import { GAME_ENGINES } from "@/lib/games/registry";
+import type { GameEngineState } from "@/lib/games/engine";
 
 export default function GamePlayer({ game }: { game: Game }) {
   const { user, saveScore } = useSession();
+  const engineFactory = GAME_ENGINES[game.id] as
+    | (typeof GAME_ENGINES)[string]
+    | undefined;
+  const canvasHandleRef = useRef<GameCanvasHandle>(null);
+
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [level, setLevel] = useState(1);
@@ -16,20 +24,52 @@ export default function GamePlayer({ game }: { game: Game }) {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
+    if (engineFactory) return;
     if (over || paused) return;
     const t = setInterval(() => setScore((s) => s + Math.floor(10 + Math.random() * 90)), 220);
     return () => clearInterval(t);
-  }, [over, paused]);
+  }, [engineFactory, over, paused]);
 
   useEffect(() => {
+    if (engineFactory) return;
     if (score > 0 && score % 2500 < 100) setLevel((l) => l + 1);
-  }, [score]);
+  }, [engineFactory, score]);
 
-  const endGame = () => setOver(true);
+  const handleEngineStateChange = (s: GameEngineState) => {
+    setScore(s.score);
+    setLives(s.lives);
+    setLevel(s.level);
+  };
+
+  const handleEngineGameOver = (finalScore: number) => {
+    setScore(finalScore);
+    setOver(true);
+  };
+
+  const togglePause = () => {
+    if (engineFactory) {
+      if (paused) canvasHandleRef.current?.resume();
+      else canvasHandleRef.current?.pause();
+    }
+    setPaused((p) => !p);
+  };
+
+  const endGame = () => {
+    if (engineFactory) {
+      canvasHandleRef.current?.forceGameOver();
+      return;
+    }
+    setOver(true);
+  };
+
   const restart = () => {
-    setScore(0);
-    setLives(3);
-    setLevel(1);
+    if (engineFactory) {
+      canvasHandleRef.current?.restart();
+    } else {
+      setScore(0);
+      setLives(3);
+      setLevel(1);
+    }
     setPaused(false);
     setOver(false);
     setSaved(false);
@@ -59,7 +99,7 @@ export default function GamePlayer({ game }: { game: Game }) {
           </div>
         </div>
         <div className="hud-actions">
-          <button className="btn yellow" onClick={() => setPaused((p) => !p)}>
+          <button className="btn yellow" onClick={togglePause}>
             {paused ? "REANUDAR" : "PAUSA"}
           </button>
           <button className="btn magenta" onClick={endGame}>
@@ -73,13 +113,23 @@ export default function GamePlayer({ game }: { game: Game }) {
 
       <div className="crt">
         <div className="crt-screen">
-          <div className="game-arena">
-            <div className="grid-floor"></div>
-            <div className="enemy e1"></div>
-            <div className="enemy e2"></div>
-            <div className="enemy e3"></div>
-            <div className="player-ship"></div>
-          </div>
+          {engineFactory ? (
+            <GameCanvas
+              ref={canvasHandleRef}
+              engineFactory={engineFactory}
+              onStateChange={handleEngineStateChange}
+              onGameOver={handleEngineGameOver}
+              hideFocusOverlay={paused}
+            />
+          ) : (
+            <div className="game-arena">
+              <div className="grid-floor"></div>
+              <div className="enemy e1"></div>
+              <div className="enemy e2"></div>
+              <div className="enemy e3"></div>
+              <div className="player-ship"></div>
+            </div>
+          )}
           {paused && (
             <div className="crt-content" style={{ background: "rgba(0,0,0,0.6)", zIndex: 5 }}>
               <div>

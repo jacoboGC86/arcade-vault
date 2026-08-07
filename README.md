@@ -12,6 +12,9 @@ https://github.com/Klerith/fernando-skills
 Specs implementadas en `specs/`:
 - `01-mvp-pantallas-visuales.md` — pantallas base (biblioteca, detalle, reproductor, auth, salón).
 - `02-pagina-inicio.md` — página de inicio (`/`) real, reemplazando el redirect a `/biblioteca`.
+- `03-pagina-about.md` — página "Acerca de".
+- `04-integracion-supabase.md` — integración de Supabase.
+- `05-motor-de-juegos-y-asteroides.md` — motor de juegos reutilizable (`GameEngine`) y puerto real de Asteroids ("ASTEROID") a `<canvas>`.
 
 ## Skills usadas
 
