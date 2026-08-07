@@ -1,6 +1,6 @@
 # 02 — Página de inicio (Home)
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** SPEC 01
 **Fecha:** 2026-08-06
 
@@ -48,16 +48,16 @@ Cada paso deja el proyecto compilando y navegable.
 
 ## Criterios de aceptación
 
-- [ ] `/` renderiza la Home (hero, why, preview de juegos, stats, actividad en vivo, precios, CTA final) en vez de redirigir a `/biblioteca`.
-- [ ] El hero muestra las siluetas flotantes animadas y los botones "Explorar juegos" (→ `/biblioteca`) y "Crear cuenta" (→ `/auth`).
-- [ ] La sección "¿Por qué Arcade Vault?" muestra las 4 feature cards con su ícono, título y descripción, con animación de entrada al hacer scroll (`.reveal`/`.in`).
-- [ ] El rail "Juegos disponibles ahora" muestra 6 `MiniCard` (de `GAMES`), cada una navega a `/juegos/[id]` al hacer click; el botón "Ver todos los juegos" navega a `/biblioteca`.
-- [ ] La banda de stats muestra los 3 bloques con animación de entrada al hacer scroll.
-- [ ] "Actividad en vivo" muestra el ticker de últimas puntuaciones y el top 5 de jugadores del día; el botón "Ver salón" navega a `/salon`.
-- [ ] La sección de precios muestra el plan único con su lista de beneficios y el FAQ de 3 preguntas; el botón "Empezar gratis" navega a `/auth`.
-- [ ] El CTA final navega a `/biblioteca` al hacer click.
-- [ ] El link "Inicio" aparece primero en el Nav (desktop y móvil), navega a `/`, y se resalta activo solo cuando `pathname === "/"`.
-- [ ] `npm run build` compila sin errores de TypeScript ni de rutas.
+- [x] `/` renderiza la Home (hero, why, preview de juegos, stats, actividad en vivo, precios, CTA final) en vez de redirigir a `/biblioteca`.
+- [x] El hero muestra las siluetas flotantes animadas y los botones "Explorar juegos" (→ `/biblioteca`) y "Crear cuenta" (→ `/auth`).
+- [x] La sección "¿Por qué Arcade Vault?" muestra las 4 feature cards con su ícono, título y descripción, con animación de entrada al hacer scroll (`.reveal`/`.in`).
+- [x] El rail "Juegos disponibles ahora" muestra 6 `MiniCard` (de `GAMES`), cada una navega a `/juegos/[id]` al hacer click; el botón "Ver todos los juegos" navega a `/biblioteca`.
+- [x] La banda de stats muestra los 3 bloques con animación de entrada al hacer scroll.
+- [x] "Actividad en vivo" muestra el ticker de últimas puntuaciones y el top 5 de jugadores del día; el botón "Ver salón" navega a `/salon`.
+- [x] La sección de precios muestra el plan único con su lista de beneficios y el FAQ de 3 preguntas; el botón "Empezar gratis" navega a `/auth`.
+- [x] El CTA final navega a `/biblioteca` al hacer click.
+- [x] El link "Inicio" aparece primero en el Nav (desktop y móvil), navega a `/`, y se resalta activo solo cuando `pathname === "/"`.
+- [x] `npm run build` compila sin errores de TypeScript ni de rutas.
 
 ## Decisiones tomadas y descartadas
 
