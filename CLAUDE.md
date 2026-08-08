@@ -21,10 +21,11 @@ The scaffold has been ported into real App Router routes and components. The ori
 - `lib/session.tsx` — `SessionProvider`/`useSession` React context replacing the prototype's ad hoc `localStorage` user/scores handling (`av_user`, `av_scores` keys).
 - `lib/games/engine.ts` — generic `GameEngine`/`GameEngineState`/`GameEngineFactory` contract (`start`/`stop`/`pause`/`resume`/`restart`/`forceGameOver` + `onStateChange`/`onGameOver` callbacks) that any real game engine implements to plug into the React HUD.
 - `lib/games/asteroids.ts` — `createAsteroidsEngine`, a TypeScript port of `references/started-games/02-asteroids/` (ship, asteroids, bullets, particles, shield/triple-shot power-ups) as a closure with no module-level state, implementing `GameEngine`.
-- `lib/games/registry.ts` — `GAME_ENGINES` map from game `id` to `GameEngineFactory` (currently only `asteroid`); `components/game-player.tsx` looks up the game's `id` here and falls back to the existing simulated player for any `id` without a registered engine.
+- `lib/games/tetris.ts` — `createTetrisEngine`, a TypeScript port of `references/started-games/03-tetris/` (10×20 board, 7 standard pieces with wall-kick rotation, soft/hard drop, line clears, levels, bomb piece, gravity power-up) as a closure with no module-level state, implementing `GameEngine` with extra `lines`/`bestCombo` state fields. Board and next-piece preview both render inside the single 800×600 canvas.
+- `lib/games/registry.ts` — `GAME_ENGINES` map from game `id` to `GameEngineFactory` (`asteroid`, `tetris`); `components/game-player.tsx` looks up the game's `id` here and falls back to the existing simulated player for any `id` without a registered engine.
 - `components/games/game-canvas.tsx` — client component that mounts the fixed 800×600 `<canvas>`, wires it to a `GameEngine` instance (mount/unmount lifecycle, keyboard focus handling, "CLIC PARA JUGAR" overlay), and exposes `pause`/`resume`/`restart`/`forceGameOver` to the parent via ref.
 
-See `specs/05-motor-de-juegos-y-asteroides.md` for the full rationale behind the engine contract and the Asteroids port.
+See `specs/05-motor-de-juegos-y-asteroides.md` for the full rationale behind the engine contract and the Asteroids port, and `specs/08-motor-tetris.md` for the Tetris port (formerly the "CAÍDA" mock, `id: "caida"`, now `id: "tetris"`).
 
 `specs/` holds Spec Driven Design docs (see README) — check there for the status and rationale behind each screen before assuming behavior is undocumented.
 

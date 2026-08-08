@@ -15,6 +15,9 @@ Specs implementadas en `specs/`:
 - `03-pagina-about.md` — página "Acerca de".
 - `04-integracion-supabase.md` — integración de Supabase.
 - `05-motor-de-juegos-y-asteroides.md` — motor de juegos reutilizable (`GameEngine`) y puerto real de Asteroids ("ASTEROID") a `<canvas>`.
+- `06-leaderboard-supabase.md` — leaderboard genérico con Supabase (guardar/consultar scores).
+- `07-leaderboard-detalle-juego.md` — leaderboard por juego en la pantalla de detalle.
+- `08-motor-tetris.md` — renombre de "CAÍDA" a "TETRIS" y puerto real del motor de Tetris a `<canvas>`.
 
 ## Skills usadas
 
