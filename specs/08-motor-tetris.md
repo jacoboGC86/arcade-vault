@@ -1,6 +1,6 @@
 # 08 — Motor de Tetris real ("TETRIS")
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** [[05-motor-de-juegos-y-asteroides]], [[06-leaderboard-supabase]]
 **Fecha:** 2026-08-08
 
@@ -80,7 +80,7 @@ Cada paso deja el proyecto compilando; el juego "TETRIS" solo queda jugable de v
 - [ ] La vista previa de la siguiente pieza se ve dentro del mismo canvas, actualizándose en cada spawn.
 - [ ] El HUD de React (`player-hud`) refleja score, nivel, líneas eliminadas y mejor combo reales del engine, actualizándose en vivo.
 - [ ] El botón PAUSA congela el juego (tablero/pieza actual quedan quietos) y REANUDAR lo retoma sin saltos.
-- [ ] El botón FIN llama a `forceGameOver()`, deteniendo el motor y disparando `onGameOver` con el score acumulado, abriendo el modal de fin de partida.
+- [ ] El botón FIN llama a `forceGameOver()`, deteniendo el motor y disparando `onGameOver` con el score acumulado, abriendo el modal dAvanza e fin de partida.
 - [ ] Cuando una pieza nueva no cabe al generarse (tablero lleno), se abre el mismo modal de fin de partida que el botón FIN, con el score real alcanzado.
 - [ ] "GUARDAR PUNTUACIÓN" en el modal llama a `saveScore({ game: "tetris", score, name })` y aparece una fila real en Supabase `scores` con `game_id: "tetris"`.
 - [ ] "JUGAR DE NUEVO" reinicia completamente la partida (score 0, líneas 0, combo 0, nivel 1, tablero vacío).
