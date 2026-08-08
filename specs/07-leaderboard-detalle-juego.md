@@ -1,6 +1,6 @@
 # 07 — Puntuaciones reales en la página de detalle de juego
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** [[06-leaderboard-supabase]]
 **Fecha:** 2026-08-07
 
