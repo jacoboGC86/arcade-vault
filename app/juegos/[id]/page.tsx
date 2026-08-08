@@ -8,12 +8,16 @@ export default async function GameDetail({ params }: { params: Promise<{ id: str
   const game = GAMES.find((g) => g.id === id);
   if (!game) notFound();
 
-  const { data } = await (await createClient())
-    .from("scores")
-    .select("name, score, created_at")
-    .eq("game_id", id)
-    .order("score", { ascending: false })
-    .limit(10);
+  const supabase = await createClient();
+  const [{ data }, { count: playsCount }] = await Promise.all([
+    supabase
+      .from("scores")
+      .select("name, score, created_at")
+      .eq("game_id", id)
+      .order("score", { ascending: false })
+      .limit(10),
+    supabase.from("scores").select("*", { count: "exact", head: true }).eq("game_id", id),
+  ]);
 
   const scores = (data ?? []).map((r, i) => ({
     rank: i + 1,
@@ -41,7 +45,7 @@ export default async function GameDetail({ params }: { params: Promise<{ id: str
           <div className="stat-strip">
             <div>
               <div className="l">Partidas</div>
-              <div className="v">{game.plays}</div>
+              <div className="v">{(playsCount ?? 0).toLocaleString("es-ES")}</div>
             </div>
             <div>
               <div className="l">Mejor global</div>
