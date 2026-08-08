@@ -1,6 +1,6 @@
 # 08 — Motor de Tetris real ("TETRIS")
 
-**Estado:** Draft
+**Estado:** Aprobado
 **Depende de:** [[05-motor-de-juegos-y-asteroides]], [[06-leaderboard-supabase]]
 **Fecha:** 2026-08-08
 
