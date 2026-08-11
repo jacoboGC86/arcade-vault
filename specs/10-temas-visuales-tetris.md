@@ -1,6 +1,6 @@
 # 10 — Temas visuales aplicados a Tetris
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** [[05-motor-de-juegos-y-asteroides]], [[08-motor-tetris]]
 **Fecha:** 2026-08-11
 
