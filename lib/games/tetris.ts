@@ -1,4 +1,6 @@
-import type { GameEngine, GameEngineState } from "./engine";
+import type { GameEngine, GameEngineOptions, GameEngineState } from "./engine";
+import { DEFAULT_GAME_THEME } from "./theme";
+import { TETRIS_THEMES } from "./themes/tetris-theme";
 
 export interface TetrisEngineState extends GameEngineState {
   lines: number;
@@ -15,19 +17,6 @@ const BOARD_Y = 0;
 const PREVIEW_X = 340;
 const PREVIEW_Y = 20;
 const PREVIEW_SIZE = 120; // 4x4 celdas de BLOCK
-
-const COLORS: (string | null)[] = [
-  null,
-  "#00e5ff",
-  "#fff176",
-  "#e040fb",
-  "#69f0ae",
-  "#ff1744",
-  "#40c4ff",
-  "#ffab40",
-  "#ff5252",
-  "#d500f9",
-];
 
 type Shape = number[][];
 
@@ -84,8 +73,13 @@ interface Piece {
   y: number;
 }
 
-export function createTetrisEngine(canvas: HTMLCanvasElement): GameEngine {
+export function createTetrisEngine(
+  canvas: HTMLCanvasElement,
+  opts?: GameEngineOptions
+): GameEngine {
   const ctx = canvas.getContext("2d")!;
+
+  let palette = TETRIS_THEMES[opts?.theme ?? DEFAULT_GAME_THEME];
 
   // ── Estado del juego (por instancia, dentro del closure) ─────────────────
   let board: number[][] = [];
@@ -305,21 +299,32 @@ export function createTetrisEngine(canvas: HTMLCanvasElement): GameEngine {
   // ── Draw ──────────────────────────────────────────────────────────────
   function drawCell(px: number, py: number, colorIndex: number, size: number, alpha = 1) {
     if (!colorIndex) return;
-    const color = COLORS[colorIndex]!;
+    const color = palette.pieces[colorIndex]!;
     ctx.save();
     ctx.globalAlpha = alpha;
     ctx.shadowColor = color;
-    ctx.shadowBlur = size * 0.5;
+    ctx.shadowBlur = size * palette.glow;
     ctx.fillStyle = color;
     ctx.fillRect(px + 3, py + 3, size - 6, size - 6);
     ctx.shadowBlur = 0;
-    ctx.fillStyle = "rgba(255,255,255,0.35)";
-    ctx.fillRect(px + 3, py + 3, size - 6, 3);
+    switch (palette.cellStyle) {
+      case "bevel":
+        ctx.fillStyle = palette.bevel;
+        ctx.fillRect(px + 3, py + 3, size - 6, 3);
+        break;
+      case "outline":
+        ctx.strokeStyle = palette.outline;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(px + 4, py + 4, size - 8, size - 8);
+        break;
+      case "flat":
+        break;
+    }
     ctx.restore();
   }
 
   function drawGrid() {
-    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+    ctx.strokeStyle = palette.grid;
     ctx.lineWidth = 0.5;
     for (let c = 1; c < COLS; c++) {
       ctx.beginPath();
@@ -336,7 +341,7 @@ export function createTetrisEngine(canvas: HTMLCanvasElement): GameEngine {
   }
 
   function drawNextPreview() {
-    ctx.strokeStyle = "rgba(255,255,255,0.2)";
+    ctx.strokeStyle = palette.previewFrame;
     ctx.lineWidth = 1;
     ctx.strokeRect(PREVIEW_X, PREVIEW_Y, PREVIEW_SIZE, PREVIEW_SIZE);
 
@@ -355,7 +360,7 @@ export function createTetrisEngine(canvas: HTMLCanvasElement): GameEngine {
 
   function draw(ts: number) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#000";
+    ctx.fillStyle = palette.background;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     drawGrid();
@@ -375,7 +380,7 @@ export function createTetrisEngine(canvas: HTMLCanvasElement): GameEngine {
             BOARD_Y + (gy + r) * BLOCK,
             current.shape[r][c],
             BLOCK,
-            0.2
+            palette.ghostAlpha
           );
 
     // pieza actual (parpadea mientras es el power-up de Gravedad)
