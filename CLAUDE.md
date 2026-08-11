@@ -16,6 +16,7 @@ The scaffold has been ported into real App Router routes and components. The ori
 - `app/jugar/[id]/page.tsx` — game player screen (was `reproductor.jsx`). Also looks up the game via `getCatalogGame(id)`.
 - `app/auth/page.tsx` — login (was `auth.jsx`).
 - `app/salon/page.tsx` — hall of fame / leaderboard (was `salon.jsx`).
+- `app/about/page.tsx` — "Acerca de" screen, ported from `references/templates/home-about/about.jsx`. Its contact form posts to `app/api/contact/route.ts`, which sends email via Resend (`resend` npm package) using `RESEND_API_KEY`/`CONTACT_FROM_EMAIL`/`CONTACT_TO_EMAIL` env vars — see spec 03.
 - `components/nav.tsx`, `components/game-card.tsx`, `components/game-player.tsx`, `components/mini-card.tsx` — shared UI pieces. `mini-card.tsx` is the simpler (no tilt) card used in the Home games rail, ported from `MiniCard` in `home.jsx` (still typed against `lib/data.ts`'s `Game`). `game-card.tsx` and `game-player.tsx` are now typed against `CatalogGame`/`CatalogGameWithBest` (`lib/games/catalog.ts`), not `lib/data.ts`'s `Game`.
 - `components/library-browser.tsx` — client component holding `/biblioteca`'s search input, category chips, and grid (moved out of `app/biblioteca/page.tsx` so the page itself can be an async Server Component); receives `games: CatalogGameWithBest[]` as a prop.
 - `lib/data.ts` — game/category data (ported from `data.jsx`), typed with `Game`, `GameCategory`, `GameColor`. Still the source for the Home games rail and for `CATS`/`PLAYERS`, but **no longer** the source of the catalog for `/biblioteca`, `/juegos/[id]`, or `/jugar/[id]` — those read from Supabase's `games` table instead (see `lib/games/catalog.ts`). Kept in sync manually; if you add/edit a game's title/description/cover/color here for the Home rail, mirror it into the `games` table too (or vice versa) to avoid drift.
@@ -34,12 +35,18 @@ See `specs/05-motor-de-juegos-y-asteroides.md` for the full rationale behind the
 Reference-only files (do not edit as if they were live code):
 - `references/templates/Arcade Vault.html` + `app.jsx`, `nav.jsx`, `biblioteca.jsx`, `detalle.jsx`, `reproductor.jsx`, `auth.jsx`, `salon.jsx`, `data.jsx` — original no-build-step prototype.
 - `references/templates/styles.css` — the neon/pixel visual language (custom properties for color per game category); port any still-missing visual details to Tailwind when touching a screen.
-- `references/templates/home-about/home.jsx`, `nav.jsx`, `styles.css` — a separate reference bundle for the Home + "Acerca de" screens. `home.jsx` is fully ported into `app/page.tsx`; `about.jsx`'s contact form and the "Acerca de" nav link are not ported yet (no destination route exists). Its `styles.css` (1744 lines) is a distinct file from `references/templates/styles.css` (968 lines) — only the Home-specific rules have been copied into `app/globals.css`, so diff carefully before porting more of it.
+- `references/templates/home-about/home.jsx`, `about.jsx`, `nav.jsx`, `styles.css` — a separate reference bundle for the Home + "Acerca de" screens. `home.jsx` is fully ported into `app/page.tsx`; `about.jsx` is ported into `app/about/page.tsx` (see above). Its `styles.css` (1744 lines) is a distinct file from `references/templates/styles.css` (968 lines) — only the Home/About-specific rules have been copied into `app/globals.css`, so diff carefully before porting more of it.
 
 When changing a screen, prefer reading the current `app/`/`components/` implementation first; fall back to the matching prototype file only to clarify original intent.
 
 ## Skills
 
 Usa siempre /frontend-design para diseñar la interfaz de usuario
+
+Usa `/add-game` para diseñar el spec de un juego nuevo o migrado (motor real, entrada de catálogo, fila en `games` de Supabase) antes de portarlo o crearlo — ver `.claude/skills/add-game/SKILL.md`. No escribe código, solo el spec; la implementación se hace después con `/spec-impl`.
+
+## Email (Resend)
+
+El envío de correo (formulario de contacto de `/about`) usa el servicio [Resend](https://resend.com) vía el paquete `resend`. Ver `app/api/contact/route.ts`. Requiere las variables de entorno `RESEND_API_KEY`, `CONTACT_FROM_EMAIL`, y `CONTACT_TO_EMAIL`.
 
 No test runner is configured yet.
