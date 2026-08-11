@@ -2,6 +2,7 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import type { GameEngine, GameEngineFactory, GameEngineState } from "@/lib/games/engine";
+import type { GameTheme } from "@/lib/games/theme";
 
 export interface GameCanvasHandle {
   pause: () => void;
@@ -15,10 +16,11 @@ interface GameCanvasProps {
   onStateChange: (state: GameEngineState) => void;
   onGameOver: (finalScore: number) => void;
   hideFocusOverlay?: boolean;
+  theme?: GameTheme;
 }
 
 const GameCanvas = forwardRef<GameCanvasHandle, GameCanvasProps>(function GameCanvas(
-  { engineFactory, onStateChange, onGameOver, hideFocusOverlay },
+  { engineFactory, onStateChange, onGameOver, hideFocusOverlay, theme },
   ref
 ) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,7 +31,9 @@ const GameCanvas = forwardRef<GameCanvasHandle, GameCanvasProps>(function GameCa
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const engine = engineFactory(canvas);
+    // `theme` se lee solo en el montaje a propósito: si entrase en las dependencias,
+    // cada cambio de tema recrearía el motor y reiniciaría la partida.
+    const engine = engineFactory(canvas, { theme });
     engineRef.current = engine;
     engine.onStateChange(onStateChange);
     engine.onGameOver(onGameOver);
@@ -41,6 +45,11 @@ const GameCanvas = forwardRef<GameCanvasHandle, GameCanvasProps>(function GameCa
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engineFactory]);
+
+  useEffect(() => {
+    if (!theme) return;
+    engineRef.current?.setTheme?.(theme);
+  }, [theme]);
 
   useImperativeHandle(ref, () => ({
     pause: () => engineRef.current?.pause(),

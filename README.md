@@ -19,8 +19,13 @@ Specs implementadas en `specs/`:
 - `07-leaderboard-detalle-juego.md` — leaderboard por juego en la pantalla de detalle.
 - `08-motor-tetris.md` — renombre de "CAÍDA" a "TETRIS" y puerto real del motor de Tetris a `<canvas>`.
 - `09-motor-arkanoid.md` — renombre de "Bloque Buster" a "Arkanoid" y puerto real del motor de Arkanoid.
+- `10-temas-visuales-tetris.md` — los temas CLÁSICO / NEON / PIXEL del HUD repintan de verdad el canvas de Tetris (paleta, fondo, rejilla, glow, estilo de celda), en caliente y sin reiniciar la partida.
 
 Además, sin spec numerada propia: el catálogo de juegos (título, descripción, categoría, cover, color) de `/biblioteca`, `/juegos/[id]` y `/jugar/[id]` ahora se lee de la tabla `games` de Supabase (vía `lib/games/catalog.ts`) en vez de `lib/data.ts`. La insignia "MEJOR PUNTUACIÓN" de la biblioteca también se calcula desde `scores` (máximo real), como ya hacía el detalle desde la spec 07.
+
+## Temas visuales
+
+El selector CLÁSICO / NEON / PIXEL del HUD del reproductor es global y se guarda en `localStorage["av_theme"]` (`lib/games/theme.ts`). Hoy solo **Tetris** repinta su canvas con él: sus paletas viven en `lib/games/themes/tetris-theme.ts` y el motor las aplica vía `setTheme`, sin reiniciar la partida. Asteroids y Arkanoid ignoran el tema; para tematizarlos hace falta su propio spec y un archivo nuevo en `lib/games/themes/`.
 
 ## Skills usadas
 

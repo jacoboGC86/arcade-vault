@@ -619,6 +619,14 @@ a { color: inherit; text-decoration: none; }
 .hud-stat.level .v { color: var(--yellow); text-shadow: 0 0 6px rgba(245,255,0,0.5); }
 .hud-actions { display: flex; gap: 10px; }
 
+.hud-themes { display: flex; gap: 6px; }
+.hud-themes .chip { padding: 5px 9px; font-size: 8px; letter-spacing: 0.1em; }
+.hud-themes .chip.active {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 0 0 8px rgba(0,245,255,0.35);
+}
+
 .crt {
   position: relative;
   border-radius: 28px;

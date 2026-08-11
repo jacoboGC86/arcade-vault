@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSession } from "@/lib/session";
 import GameCanvas, { type GameCanvasHandle } from "@/components/games/game-canvas";
 import { GAME_ENGINES } from "@/lib/games/registry";
+import { GAME_THEMES, useGameTheme } from "@/lib/games/theme";
 import type { GameEngineState } from "@/lib/games/engine";
 import type { CatalogGame } from "@/lib/games/catalog";
 
@@ -14,6 +15,7 @@ export default function GamePlayer({ game }: { game: CatalogGame }) {
     | (typeof GAME_ENGINES)[string]
     | undefined;
   const canvasHandleRef = useRef<GameCanvasHandle>(null);
+  const [theme, setTheme] = useGameTheme();
 
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
@@ -92,7 +94,7 @@ export default function GamePlayer({ game }: { game: CatalogGame }) {
   };
 
   return (
-    <div className="av-player fade-in">
+    <div className="av-player fade-in" data-theme={theme}>
       <div className="player-hud">
         <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
           <div className="hud-stat">
@@ -112,6 +114,22 @@ export default function GamePlayer({ game }: { game: CatalogGame }) {
           <div className="hud-stat level">
             <div className="l">Nivel</div>
             <div className="v">{String(level).padStart(2, "0")}</div>
+          </div>
+          <div className="hud-stat theme">
+            <div className="l">Tema</div>
+            <div className="hud-themes">
+              {GAME_THEMES.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={"chip" + (theme === t.id ? " active" : "")}
+                  aria-pressed={theme === t.id}
+                  onClick={() => setTheme(t.id)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
         <div className="hud-actions">
@@ -136,6 +154,7 @@ export default function GamePlayer({ game }: { game: CatalogGame }) {
               onStateChange={handleEngineStateChange}
               onGameOver={handleEngineGameOver}
               hideFocusOverlay={paused}
+              theme={theme}
             />
           ) : (
             <div className="game-arena">
