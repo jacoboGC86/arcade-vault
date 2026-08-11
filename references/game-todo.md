@@ -17,7 +17,7 @@ Solo el usuario mueve una fila de `sugerido` a `aprobado` o `descartado`.
 | 1 | Space Invaders (`invasores`) | SHOOTER | sugerido | M | Reemplaza un mock cuya descripción ya narra la mecánica; score acumulativo canónico, ideal para el leaderboard; complejidad calibrada al nivel de Arkanoid. |
 | 2 | Snake (`serpentina`) | ARCADE | sugerido | S | El motor más barato del backlog: grid, 4 teclas, score acumulativo puro; cero riesgo de marca. |
 | 3 | Pac-Man (`gloton`) | ARCADE | sugerido | L | Gran valor de catálogo (laberinto + IA de persecución, mecánica ausente), pero es el candidato más caro y con más riesgo de marca. |
-| 4 | Frogger (`ranaria`) | ARCADE | sugerido | M | Carriles y troncos son fáciles; el score por tiempo/llegada y la marca de Konami lo complican. |
+| 4 | Frogger (`ranaria`) | ARCADE | aprobado | M | Carriles y troncos son fáciles; el score por tiempo/llegada y la marca de Konami lo complican. |
 | 5 | Pong (`duelo-pixel`) | VERSUS | sugerido | S | Único candidato de la categoría VERSUS, pero su score (a 11 puntos) no es comparable en un leaderboard global. |
 
 ### Space Invaders (`invasores`)

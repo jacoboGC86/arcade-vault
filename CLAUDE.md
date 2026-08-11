@@ -47,7 +47,10 @@ Usa `/add-game` para diseñar el spec de un juego nuevo o migrado (motor real, e
 
 ## Agentes
 
-- `game-planner` (`.claude/agents/game-planner.md`) — decide **qué** juego añadir al catálogo, el paso previo a `/add-game`. Investiga candidatos (con búsqueda web), los evalúa contra el contrato `GameEngine`, el leaderboard y los huecos del catálogo, y mantiene un backlog priorizado en `references/game-todo.md`, que es su memoria entre sesiones. No escribe specs ni código; el único archivo que modifica es `references/game-todo.md`. Flujo completo: `game-planner` (qué juego) → `/add-game` (spec) → `/spec-impl` (implementación).
+- `game-planner` (`.claude/agents/game-planner.md`) — decide **qué** juego añadir al catálogo, el paso previo a `/add-game`. Investiga candidatos (con búsqueda web), los evalúa contra el contrato `GameEngine`, el leaderboard y los huecos del catálogo, y mantiene un backlog priorizado en `references/game-todo.md`, que es su memoria entre sesiones. No escribe specs ni código; el único archivo que modifica es `references/game-todo.md`.
+- `game-jam` (`.claude/agents/game-jam.md`) — decide **con qué enfoque** portar un juego ya elegido. Genera dos propuestas de spec rivales para el **mismo** juego en `specs/game-jam/<game-id>/propuesta-a.md` (port fiel y mínimo) y `propuesta-b.md` (variante ampliada), divergiendo en al menos tres ejes (alcance de mecánicas, `GameEngineState`, puntuación, progresión, power-ups). Toma el juego del argumento o, si no hay, del top de `references/game-todo.md` (que solo lee, nunca modifica). No escribe código; los únicos archivos que escribe son esas dos propuestas. Paso opcional: si el enfoque ya está claro, se va directo a `/add-game`.
+
+Flujo completo: `game-planner` (qué juego) → `game-jam` (dos enfoques, opcional) → `/add-game` (spec definitivo en `specs/NN-*.md`) → `/spec-impl` (implementación).
 
 ## Email (Resend)
 
