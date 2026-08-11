@@ -503,5 +503,11 @@ export function createTetrisEngine(
     onGameOver(cb) {
       gameOverCb = cb;
     },
+    setTheme(theme) {
+      palette = TETRIS_THEMES[theme];
+      // Con el bucle parado (pausa o fin de partida) no habrá otro frame:
+      // repintamos ya para que el cambio de tema se vea al instante.
+      if (!running) draw(performance.now());
+    },
   };
 }
