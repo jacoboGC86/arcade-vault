@@ -45,6 +45,10 @@ Usa siempre /frontend-design para diseñar la interfaz de usuario
 
 Usa `/add-game` para diseñar el spec de un juego nuevo o migrado (motor real, entrada de catálogo, fila en `games` de Supabase) antes de portarlo o crearlo — ver `.claude/skills/add-game/SKILL.md`. No escribe código, solo el spec; la implementación se hace después con `/spec-impl`.
 
+## Agentes
+
+- `game-planner` (`.claude/agents/game-planner.md`) — decide **qué** juego añadir al catálogo, el paso previo a `/add-game`. Investiga candidatos (con búsqueda web), los evalúa contra el contrato `GameEngine`, el leaderboard y los huecos del catálogo, y mantiene un backlog priorizado en `references/game-todo.md`, que es su memoria entre sesiones. No escribe specs ni código; el único archivo que modifica es `references/game-todo.md`. Flujo completo: `game-planner` (qué juego) → `/add-game` (spec) → `/spec-impl` (implementación).
+
 ## Email (Resend)
 
 El envío de correo (formulario de contacto de `/about`) usa el servicio [Resend](https://resend.com) vía el paquete `resend`. Ver `app/api/contact/route.ts`. Requiere las variables de entorno `RESEND_API_KEY`, `CONTACT_FROM_EMAIL`, y `CONTACT_TO_EMAIL`.
