@@ -1,19 +1,13 @@
-import type { GameEngine, GameEngineState } from "./engine";
+import type { GameEngine, GameEngineOptions, GameEngineState } from "./engine";
+import { DEFAULT_GAME_THEME } from "./theme";
+import { ARKANOID_THEMES } from "./themes/arkanoid-theme";
 
 const W = 800;
 const H = 600;
 
-// Colores neon equivalentes a los 7 nombres CSS del original (rojo, amarillo,
-// cian, magenta, rosa, verde, gris), mismo orden y misma rotación por nivel.
-const BLOCK_ROW_COLORS = [
-  "#ff1744",
-  "#ffd600",
-  "#00e5ff",
-  "#e040fb",
-  "#ff4da6",
-  "#69f0ae",
-  "#9e9e9e",
-];
+// 7 filas de bloques; el color de cada fila lo aporta la paleta del tema
+// (`blockRows`), con la misma rotación por nivel que el original.
+const BLOCK_ROWS = 7;
 const BLOCK_COLS = 14;
 const BLOCK_W = 54;
 const BLOCK_H = 20;
@@ -51,31 +45,36 @@ interface Block {
   y: number;
   w: number;
   h: number;
-  color: string;
+  /** Índice (ya rotado por nivel) dentro de `palette.blockRows`. */
+  colorIndex: number;
   alive: boolean;
 }
 
 function createBlocks(level: number): Block[] {
   const blocks: Block[] = [];
   const rotation = (level - 1) * 2;
-  const rotatedColors = BLOCK_ROW_COLORS.slice(rotation).concat(BLOCK_ROW_COLORS.slice(0, rotation));
-  rotatedColors.forEach((color, row) => {
+  for (let row = 0; row < BLOCK_ROWS; row++) {
     for (let col = 0; col < BLOCK_COLS; col++) {
       blocks.push({
         x: BLOCK_OFFSET_X + col * (BLOCK_W + BLOCK_GAP),
         y: BLOCK_OFFSET_Y + row * (BLOCK_H + BLOCK_GAP),
         w: BLOCK_W,
         h: BLOCK_H,
-        color,
+        colorIndex: (row + rotation) % BLOCK_ROWS,
         alive: true,
       });
     }
-  });
+  }
   return blocks;
 }
 
-export function createArkanoidEngine(canvas: HTMLCanvasElement): GameEngine {
+export function createArkanoidEngine(
+  canvas: HTMLCanvasElement,
+  opts?: GameEngineOptions
+): GameEngine {
   const ctx = canvas.getContext("2d")!;
+
+  let palette = ARKANOID_THEMES[opts?.theme ?? DEFAULT_GAME_THEME];
 
   // ── Input ───────────────────────────────────────────────────────────────
   const keys: Record<string, boolean> = {};
@@ -270,18 +269,18 @@ export function createArkanoidEngine(canvas: HTMLCanvasElement): GameEngine {
   // ── Draw ──────────────────────────────────────────────────────────────
   function drawPaddle() {
     ctx.save();
-    ctx.shadowColor = "#00e5ff";
-    ctx.shadowBlur = 12;
-    ctx.fillStyle = "#00e5ff";
+    ctx.shadowColor = palette.paddle;
+    ctx.shadowBlur = 12 * palette.glow;
+    ctx.fillStyle = palette.paddle;
     ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h);
     ctx.restore();
   }
 
   function drawBall() {
     ctx.save();
-    ctx.shadowColor = "#ffffff";
-    ctx.shadowBlur = 10;
-    ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = palette.ball;
+    ctx.shadowBlur = 10 * palette.glow;
+    ctx.fillStyle = palette.ball;
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
     ctx.fill();
@@ -291,17 +290,24 @@ export function createArkanoidEngine(canvas: HTMLCanvasElement): GameEngine {
   function drawBlocks() {
     for (const block of blocks) {
       if (!block.alive) continue;
+      const color = palette.blockRows[block.colorIndex];
       ctx.save();
-      ctx.shadowColor = block.color;
-      ctx.shadowBlur = 6;
-      ctx.fillStyle = block.color;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 6 * palette.glow;
+      ctx.fillStyle = color;
       ctx.fillRect(block.x, block.y, block.w, block.h);
+      if (palette.blockStyle === "outline") {
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = palette.blockOutline;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(block.x + 1, block.y + 1, block.w - 2, block.h - 2);
+      }
       ctx.restore();
     }
   }
 
   function draw() {
-    ctx.fillStyle = "#000";
+    ctx.fillStyle = palette.background;
     ctx.fillRect(0, 0, W, H);
 
     drawBlocks();
@@ -363,6 +369,12 @@ export function createArkanoidEngine(canvas: HTMLCanvasElement): GameEngine {
     },
     onGameOver(cb) {
       gameOverCb = cb;
+    },
+    setTheme(theme) {
+      palette = ARKANOID_THEMES[theme];
+      // Con la partida en pausa no hay bucle: repintamos ya para que el
+      // cambio de tema se vea al instante.
+      if (!running) draw();
     },
   };
 }
