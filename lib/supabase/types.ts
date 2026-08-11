@@ -16,15 +16,30 @@ export type Database = {
     Tables: {
       games: {
         Row: {
+          cat: string | null
+          color: string | null
+          cover: string | null
           id: string
+          long: string | null
+          short: string | null
           title: string
         }
         Insert: {
+          cat?: string | null
+          color?: string | null
+          cover?: string | null
           id: string
+          long?: string | null
+          short?: string | null
           title: string
         }
         Update: {
+          cat?: string | null
+          color?: string | null
+          cover?: string | null
           id?: string
+          long?: string | null
+          short?: string | null
           title?: string
         }
         Relationships: []

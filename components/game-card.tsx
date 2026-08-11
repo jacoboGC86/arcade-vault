@@ -2,9 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
-import type { Game } from "@/lib/data";
+import type { CatalogGameWithBest } from "@/lib/games/catalog";
 
-export default function GameCard({ game }: { game: Game }) {
+export default function GameCard({ game }: { game: CatalogGameWithBest }) {
   const tiltRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 

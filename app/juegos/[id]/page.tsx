@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { GAMES } from "@/lib/data";
+import { getCatalogGame } from "@/lib/games/catalog";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function GameDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const game = GAMES.find((g) => g.id === id);
-  if (!game) notFound();
 
   const supabase = await createClient();
-  const [{ data }, { count: playsCount }] = await Promise.all([
+  const [game, { data }, { count: playsCount }] = await Promise.all([
+    getCatalogGame(id),
     supabase
       .from("scores")
       .select("name, score, created_at")
@@ -18,6 +17,7 @@ export default async function GameDetail({ params }: { params: Promise<{ id: str
       .limit(10),
     supabase.from("scores").select("*", { count: "exact", head: true }).eq("game_id", id),
   ]);
+  if (!game) notFound();
 
   const scores = (data ?? []).map((r, i) => ({
     rank: i + 1,

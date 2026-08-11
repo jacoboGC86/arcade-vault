@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import type { Game } from "@/lib/data";
 import { useSession } from "@/lib/session";
 import GameCanvas, { type GameCanvasHandle } from "@/components/games/game-canvas";
 import { GAME_ENGINES } from "@/lib/games/registry";
 import type { GameEngineState } from "@/lib/games/engine";
+import type { CatalogGame } from "@/lib/games/catalog";
 
-export default function GamePlayer({ game }: { game: Game }) {
+export default function GamePlayer({ game }: { game: CatalogGame }) {
   const { user, saveScore } = useSession();
   const engineFactory = GAME_ENGINES[game.id] as
     | (typeof GAME_ENGINES)[string]
