@@ -154,6 +154,7 @@ export default function GamePlayer({ game }: { game: CatalogGame }) {
               onStateChange={handleEngineStateChange}
               onGameOver={handleEngineGameOver}
               hideFocusOverlay={paused}
+              theme={theme}
             />
           ) : (
             <div className="game-arena">
