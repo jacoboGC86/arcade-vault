@@ -1,4 +1,6 @@
-import type { GameEngine, GameEngineState } from "./engine";
+import type { GameEngine, GameEngineOptions, GameEngineState } from "./engine";
+import { DEFAULT_GAME_THEME } from "./theme";
+import { ASTEROID_THEMES } from "./themes/asteroid-theme";
 
 const W = 800;
 const H = 600;
@@ -21,10 +23,51 @@ const dist = (a: { x: number; y: number }, b: { x: number; y: number }) =>
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
 const randInt = (min: number, max: number) => Math.floor(rand(min, max + 1));
 
+/** Convierte un color hex de la paleta en rgba() con el alpha dinámico del motor. */
+function withAlpha(color: string, alpha: number) {
+  const hex = color.trim();
+  if (hex[0] !== "#") return color;
+  const full =
+    hex.length === 4
+      ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}`
+      : hex;
+  const r = parseInt(full.slice(1, 3), 16);
+  const g = parseInt(full.slice(3, 5), 16);
+  const b = parseInt(full.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 type GameState = "playing" | "dead" | "gameover";
 
-export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
+export function createAsteroidsEngine(
+  canvas: HTMLCanvasElement,
+  opts?: GameEngineOptions
+): GameEngine {
   const ctx = canvas.getContext("2d")!;
+
+  let palette = ASTEROID_THEMES[opts?.theme ?? DEFAULT_GAME_THEME];
+
+  /** Aplica el glow del tema al trazo/relleno siguiente (no hace nada si glow = 0). */
+  function applyGlow(color: string) {
+    if (palette.glow <= 0) return;
+    ctx.shadowBlur = 10 * palette.glow;
+    ctx.shadowColor = color;
+  }
+
+  /** Pinta el path actual como contorno o silueta según el estilo del tema. */
+  function paintShape(color: string) {
+    if (palette.shapeStyle === "stroke") {
+      ctx.strokeStyle = color;
+      ctx.stroke();
+      return;
+    }
+    ctx.fillStyle = color;
+    ctx.fill();
+    if (palette.shapeStyle === "fill-outline") {
+      ctx.strokeStyle = palette.shapeOutline;
+      ctx.stroke();
+    }
+  }
 
   // ── Input ───────────────────────────────────────────────────────────────
   const keys: Record<string, boolean> = {};
@@ -77,10 +120,13 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
     }
 
     draw() {
-      ctx.fillStyle = "#fff";
+      ctx.save();
+      applyGlow(palette.bullet);
+      ctx.fillStyle = palette.bullet;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
       ctx.fill();
+      ctx.restore();
     }
   }
 
@@ -136,7 +182,7 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(this.rot);
-      ctx.strokeStyle = "#fff";
+      applyGlow(palette.asteroid);
       ctx.lineWidth = 1.5;
       ctx.lineJoin = "round";
       ctx.beginPath();
@@ -145,7 +191,7 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
         ctx.lineTo(this.verts[i][0], this.verts[i][1]);
       }
       ctx.closePath();
-      ctx.stroke();
+      paintShape(palette.asteroid);
       ctx.restore();
     }
   }
@@ -236,7 +282,7 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(this.angle);
-      ctx.strokeStyle = "#fff";
+      applyGlow(palette.ship);
       ctx.lineWidth = 1.5;
       ctx.lineJoin = "round";
 
@@ -246,14 +292,15 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
       ctx.lineTo(-7, 0); // muesca trasera
       ctx.lineTo(-12, 9); // ala derecha
       ctx.closePath();
-      ctx.stroke();
+      paintShape(palette.ship);
 
       if (this.thrusting && Math.random() > 0.35) {
+        applyGlow(palette.thruster);
         ctx.beginPath();
         ctx.moveTo(-8, -4);
         ctx.lineTo(-8 - rand(6, 14), 0);
         ctx.lineTo(-8, 4);
-        ctx.strokeStyle = "rgba(255, 130, 0, 0.85)";
+        ctx.strokeStyle = palette.thruster;
         ctx.stroke();
       }
 
@@ -291,7 +338,7 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
 
     draw() {
       const alpha = this.ttl / this.life;
-      ctx.strokeStyle = `rgba(255,255,255,${alpha.toFixed(2)})`;
+      ctx.strokeStyle = withAlpha(palette.particle, Number(alpha.toFixed(2)));
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(this.x, this.y);
@@ -324,7 +371,7 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
 
       ctx.save();
       ctx.translate(this.x, this.y);
-      ctx.strokeStyle = "#fff";
+      applyGlow(palette.shieldPowerUp);
       ctx.lineWidth = 1.5;
       ctx.globalAlpha = 0.7 + blink * 0.3;
 
@@ -337,7 +384,7 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
         else ctx.lineTo(x, y);
       }
       ctx.closePath();
-      ctx.stroke();
+      paintShape(palette.shieldPowerUp);
 
       ctx.restore();
     }
@@ -372,11 +419,13 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(Math.PI / 4); // 45° para que sea un diamante
-      ctx.strokeStyle = "#f00";
+      applyGlow(palette.triplePowerUp);
       ctx.lineWidth = 1.5;
       ctx.globalAlpha = 0.7 + blink * 0.3;
 
-      ctx.strokeRect(-this.radius, -this.radius, this.radius * 2, this.radius * 2);
+      ctx.beginPath();
+      ctx.rect(-this.radius, -this.radius, this.radius * 2, this.radius * 2);
+      paintShape(palette.triplePowerUp);
 
       ctx.restore();
     }
@@ -416,7 +465,8 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
     const alpha = 0.4 + remaining * 0.3;
 
     ctx.save();
-    ctx.strokeStyle = `rgba(0, 220, 255, ${alpha})`;
+    applyGlow(palette.shield);
+    ctx.strokeStyle = withAlpha(palette.shield, alpha);
     ctx.lineWidth = 2;
     ctx.globalAlpha = alpha;
 
@@ -426,7 +476,7 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
 
     if (ship.shieldTimer < 1) {
       const pulse = Math.sin(ship.shieldTimer * Math.PI * 4) * 0.5 + 0.5;
-      ctx.strokeStyle = `rgba(0, 220, 255, ${0.2 + pulse * 0.4})`;
+      ctx.strokeStyle = withAlpha(palette.shield, 0.2 + pulse * 0.4);
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.arc(ship.x, ship.y, ship.radius + 12, 0, Math.PI * 2);
@@ -472,7 +522,8 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
     const alpha = 0.3 + remaining * 0.2;
 
     ctx.save();
-    ctx.strokeStyle = `rgba(255, 0, 0, ${alpha})`;
+    applyGlow(palette.tripleShotAura);
+    ctx.strokeStyle = withAlpha(palette.tripleShotAura, alpha);
     ctx.lineWidth = 1.5;
     ctx.globalAlpha = alpha;
 
@@ -661,7 +712,7 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
 
   // ── Draw ──────────────────────────────────────────────────────────────
   function draw() {
-    ctx.fillStyle = "#000";
+    ctx.fillStyle = palette.background;
     ctx.fillRect(0, 0, W, H);
 
     particles.forEach((p) => p.draw());
@@ -727,6 +778,11 @@ export function createAsteroidsEngine(canvas: HTMLCanvasElement): GameEngine {
     },
     onGameOver(cb) {
       gameOverCb = cb;
+    },
+    setTheme(theme) {
+      palette = ASTEROID_THEMES[theme];
+      // Repintado inmediato: con la partida en pausa el bucle no corre.
+      if (!running && ship) draw();
     },
   };
 }
