@@ -18,6 +18,9 @@ Specs implementadas en `specs/`:
 - `06-leaderboard-supabase.md` — leaderboard genérico con Supabase (guardar/consultar scores).
 - `07-leaderboard-detalle-juego.md` — leaderboard por juego en la pantalla de detalle.
 - `08-motor-tetris.md` — renombre de "CAÍDA" a "TETRIS" y puerto real del motor de Tetris a `<canvas>`.
+- `09-motor-arkanoid.md` — renombre de "Bloque Buster" a "Arkanoid" y puerto real del motor de Arkanoid.
+
+Además, sin spec numerada propia: el catálogo de juegos (título, descripción, categoría, cover, color) de `/biblioteca`, `/juegos/[id]` y `/jugar/[id]` ahora se lee de la tabla `games` de Supabase (vía `lib/games/catalog.ts`) en vez de `lib/data.ts`. La insignia "MEJOR PUNTUACIÓN" de la biblioteca también se calcula desde `scores` (máximo real), como ya hacía el detalle desde la spec 07.
 
 ## Skills usadas
 
