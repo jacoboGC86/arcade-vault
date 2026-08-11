@@ -29,6 +29,18 @@ npx skills@latest add Klerith/fernando-skills
 npx skills add https://github.com/anthropics/skills --skill frontend-design
 ```
 
+Además, la skill local `add-game` (`.claude/skills/add-game/`) diseña el spec para incorporar un juego nuevo o migrado al catálogo (motor real, entrada de catálogo, fila en `games` de Supabase) antes de implementarlo con `/spec-impl`.
+
+## Email
+
+El formulario de contacto de `/about` envía correo con [Resend](https://resend.com) (`app/api/contact/route.ts`). Configura estas variables de entorno:
+
+```bash
+RESEND_API_KEY=
+CONTACT_FROM_EMAIL=
+CONTACT_TO_EMAIL=
+```
+
 ## Commands
 
 ```bash
